@@ -3,7 +3,7 @@
 import grpc
 import warnings
 
-import helloworld_pb2 as helloworld__pb2
+import calculator_pb2 as calculator__pb2
 
 GRPC_GENERATED_VERSION = '1.74.0'
 GRPC_VERSION = grpc.__version__
@@ -18,14 +18,14 @@ except ImportError:
 if _version_not_supported:
     raise RuntimeError(
         f'The grpc package installed is at version {GRPC_VERSION},'
-        + f' but the generated code in helloworld_pb2_grpc.py depends on'
+        + f' but the generated code in calculator_pb2_grpc.py depends on'
         + f' grpcio>={GRPC_GENERATED_VERSION}.'
         + f' Please upgrade your grpc module to grpcio>={GRPC_GENERATED_VERSION}'
         + f' or downgrade your generated code using grpcio-tools<={GRPC_VERSION}.'
     )
 
 
-class GreeterStub(object):
+class CalculatorStub(object):
     """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
@@ -34,61 +34,59 @@ class GreeterStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.SayHello = channel.unary_unary(
-                '/helloworld.v1.Greeter/SayHello',
-                request_serializer=helloworld__pb2.HelloRequest.SerializeToString,
-                response_deserializer=helloworld__pb2.HelloReply.FromString,
+        self.Add = channel.unary_unary(
+                '/calculator.v1.Calculator/Add',
+                request_serializer=calculator__pb2.CalculatorRequest.SerializeToString,
+                response_deserializer=calculator__pb2.CalculatorResponse.FromString,
                 _registered_method=True)
-        self.Chat = channel.stream_stream(
-                '/helloworld.v1.Greeter/Chat',
-                request_serializer=helloworld__pb2.ChatMessage.SerializeToString,
-                response_deserializer=helloworld__pb2.ChatMessage.FromString,
+        self.Subtract = channel.unary_unary(
+                '/calculator.v1.Calculator/Subtract',
+                request_serializer=calculator__pb2.CalculatorRequest.SerializeToString,
+                response_deserializer=calculator__pb2.CalculatorResponse.FromString,
                 _registered_method=True)
 
 
-class GreeterServicer(object):
+class CalculatorServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def SayHello(self, request, context):
-        """單次請求-回應
-        """
+    def Add(self, request, context):
+        """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def Chat(self, request_iterator, context):
-        """雙向串流：兩邊都可連續傳訊息
-        """
+    def Subtract(self, request, context):
+        """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
 
-def add_GreeterServicer_to_server(servicer, server):
+def add_CalculatorServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'SayHello': grpc.unary_unary_rpc_method_handler(
-                    servicer.SayHello,
-                    request_deserializer=helloworld__pb2.HelloRequest.FromString,
-                    response_serializer=helloworld__pb2.HelloReply.SerializeToString,
+            'Add': grpc.unary_unary_rpc_method_handler(
+                    servicer.Add,
+                    request_deserializer=calculator__pb2.CalculatorRequest.FromString,
+                    response_serializer=calculator__pb2.CalculatorResponse.SerializeToString,
             ),
-            'Chat': grpc.stream_stream_rpc_method_handler(
-                    servicer.Chat,
-                    request_deserializer=helloworld__pb2.ChatMessage.FromString,
-                    response_serializer=helloworld__pb2.ChatMessage.SerializeToString,
+            'Subtract': grpc.unary_unary_rpc_method_handler(
+                    servicer.Subtract,
+                    request_deserializer=calculator__pb2.CalculatorRequest.FromString,
+                    response_serializer=calculator__pb2.CalculatorResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'helloworld.v1.Greeter', rpc_method_handlers)
+            'calculator.v1.Calculator', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
-    server.add_registered_method_handlers('helloworld.v1.Greeter', rpc_method_handlers)
+    server.add_registered_method_handlers('calculator.v1.Calculator', rpc_method_handlers)
 
 
  # This class is part of an EXPERIMENTAL API.
-class Greeter(object):
+class Calculator(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def SayHello(request,
+    def Add(request,
             target,
             options=(),
             channel_credentials=None,
@@ -101,9 +99,9 @@ class Greeter(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/helloworld.v1.Greeter/SayHello',
-            helloworld__pb2.HelloRequest.SerializeToString,
-            helloworld__pb2.HelloReply.FromString,
+            '/calculator.v1.Calculator/Add',
+            calculator__pb2.CalculatorRequest.SerializeToString,
+            calculator__pb2.CalculatorResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -115,7 +113,7 @@ class Greeter(object):
             _registered_method=True)
 
     @staticmethod
-    def Chat(request_iterator,
+    def Subtract(request,
             target,
             options=(),
             channel_credentials=None,
@@ -125,12 +123,12 @@ class Greeter(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.stream_stream(
-            request_iterator,
+        return grpc.experimental.unary_unary(
+            request,
             target,
-            '/helloworld.v1.Greeter/Chat',
-            helloworld__pb2.ChatMessage.SerializeToString,
-            helloworld__pb2.ChatMessage.FromString,
+            '/calculator.v1.Calculator/Subtract',
+            calculator__pb2.CalculatorRequest.SerializeToString,
+            calculator__pb2.CalculatorResponse.FromString,
             options,
             channel_credentials,
             insecure,
